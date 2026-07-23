@@ -3,376 +3,594 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KOBR | Classified Identity</title>
+    <title>KOBR // مهندس الأنظمة المعقدة</title>
+    <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Orbitron:wght@500;800;900&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Fira+Code:wght@300;400;600&family=Tajawal:wght@300;500;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
     <style>
         :root {
-            --bg-color: #050203;
-            --card-bg: rgba(18, 5, 8, 0.85);
-            --accent-red: #ff0033;
-            --accent-glow: rgba(255, 0, 51, 0.4);
-            --text-primary: #e0e6ed;
-            --text-dim: #a58c93;
-            --border-color: rgba(255, 0, 51, 0.3);
+            --bg-base: #030305;
+            --bg-surface: #08080d;
+            --neon-red: #ff003c;
+            --neon-red-dim: #600016;
+            --neon-red-glow: rgba(255, 0, 60, 0.35);
+            --text-main: #f1f5f9;
+            --text-muted: #64748b;
+            --font-mono: 'Fira Code', monospace;
+            --font-title: 'Tajawal', sans-serif;
+            --font-luxury: 'Amiri', serif;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            user-select: none;
+            cursor: none; /* مؤشر مخصص */
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            font-family: 'Tajawal', 'Chakra Petch', sans-serif;
-            min-height: 200vh;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: var(--font-title);
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 50% 35%, rgba(255, 0, 51, 0.12) 0%, transparent 60%),
-                linear-gradient(to bottom, transparent 95%, rgba(255, 0, 51, 0.05) 100%);
-            background-size: 100% 100%, 100% 4px;
+            selection-background-color: var(--neon-red);
+            selection-color: #000;
         }
 
-        .cyber-grid {
+        /* --- المؤشر المخصص --- */
+        #cursor-dot {
+            pointer-events: none;
+            position: fixed;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            width: 6px;
+            height: 6px;
+            background-color: var(--neon-red);
+            box-shadow: 0 0 12px var(--neon-red);
+        }
+
+        /* --- خلفية الماتريكس والتأثيرات --- */
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.28;
+        }
+
+        /* حاوية الكلمات المتناثرة في الخلفية */
+        #floating-words-container {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(255, 0, 51, 0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 0, 51, 0.04) 1px, transparent 1px);
-            background-size: 40px 40px;
+            width: 100vw;
+            height: 100vh;
             z-index: -1;
             pointer-events: none;
+            overflow: hidden;
         }
 
-        .hero-section {
+        .floating-word {
+            position: absolute;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: rgba(255, 0, 60, 0.15);
+            white-space: nowrap;
+            user-select: none;
+            animation: floatWordUp 12s linear infinite;
+        }
+
+        @keyframes floatWordUp {
+            0% {
+                transform: translateY(105vh) translateX(0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.35;
+            }
+            80% {
+                opacity: 0.35;
+            }
+            100% {
+                transform: translateY(-10vh) translateX(30px);
+                opacity: 0;
+            }
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(255,0,60,0),
+                rgba(255,0,60,0) 50%,
+                rgba(0, 0, 0, 0.4) 50%,
+                rgba(0, 0, 0, 0.4)
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 998;
+            opacity: 0.7;
+        }
+
+        /* --- شريط الملاحة --- */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 0, 60, 0.1);
+        }
+
+        .brand {
+            font-family: var(--font-title);
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #fff;
+            text-decoration: none;
+            text-shadow: 0 0 15px var(--neon-red-glow);
+        }
+
+        .brand span { color: var(--neon-red); }
+
+        .sys-status {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--neon-red);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            direction: ltr;
+        }
+
+        .status-dot {
+            width: 8px; height: 8px;
+            background: var(--neon-red);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-red);
+            animation: pulse 1.5s infinite;
+        }
+
+        /* --- الواجهة الرئيسية (HERO) --- */
+        .hero {
             height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 20px;
+            padding: 0 1.5rem;
             position: relative;
         }
 
-        .status-badge {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.85rem;
-            letter-spacing: 3px;
-            color: var(--accent-red);
-            background: rgba(255, 0, 51, 0.08);
-            border: 1px solid var(--border-color);
-            padding: 8px 18px;
-            border-radius: 50px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 15px var(--accent-glow);
-            text-transform: uppercase;
-            animation: pulse 2.5s infinite alternate;
-        }
-
-        .identity-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 5rem;
-            font-weight: 900;
-            letter-spacing: 10px;
-            color: #ffffff;
-            text-shadow: 
-                0 0 20px var(--accent-glow),
-                0 0 40px rgba(255, 0, 51, 0.3);
-            margin-bottom: 10px;
-            position: relative;
-        }
-
-        /* الجمجمة الواقعية المرسومة باللون الأحمر */
-        .skull-container {
-            width: 180px;
-            height: 220px;
-            margin: 5px 0 20px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            animation: pulse-skull 3.5s infinite ease-in-out;
-        }
-
-        .skull-img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 0 20px var(--accent-red)) drop-shadow(0 0 40px var(--accent-glow));
-        }
-
-        .subtitle {
-            font-family: 'Chakra Petch', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-dim);
-            letter-spacing: 1.5px;
-            max-width: 650px;
-            line-height: 1.6;
+        .hero-subtitle {
+            font-family: var(--font-mono);
+            color: var(--neon-red);
+            letter-spacing: 4px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
             direction: ltr;
-            text-transform: uppercase;
         }
 
-        .scroll-indicator {
-            position: absolute;
-            bottom: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            color: var(--text-dim);
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            opacity: 0.7;
-            animation: bounce 2s infinite;
+        .hero-title {
+            font-size: clamp(3.5rem, 12vw, 8rem);
+            font-weight: 900;
+            letter-spacing: 8px;
+            color: #fff;
+            position: relative;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 25px var(--neon-red-glow);
         }
 
-        .scroll-indicator .arrow {
-            width: 12px;
-            height: 12px;
-            border-right: 2px solid var(--accent-red);
-            border-bottom: 2px solid var(--accent-red);
-            transform: rotate(45deg);
+        .hero-quote {
+            font-family: var(--font-luxury);
+            font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+            color: var(--text-main);
+            max-width: 750px;
+            line-height: 1.8;
+            border-right: 3px solid var(--neon-red);
+            padding-right: 1.5rem;
+            text-align: right;
+            margin-top: 1.5rem;
+            background: linear-gradient(-90deg, rgba(255,0,60,0.08), transparent);
+            padding-top: 0.8rem;
+            padding-bottom: 0.8rem;
         }
-
-        .contact-section {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 40px 20px;
-        }
-
-        .contact-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 45px 35px;
-            width: 100%;
-            max-width: 480px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.95), 0 0 35px var(--accent-glow);
+                /* --- لوحات الزجاج (Glassmorphism) --- */
+        .glass-panel {
+            background: rgba(8, 8, 13, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 0, 60, 0.18);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+            border-radius: 6px;
             position: relative;
             overflow: hidden;
         }
 
-        .contact-card::before {
+        @keyframes neon-border-travel {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .glass-panel::after, .intel-card::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent-red), transparent);
+            top: 0; left: 0;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-red), transparent);
+            box-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red);
+            animation: neon-border-travel 3s linear infinite;
+            pointer-events: none;
+            z-index: 10;
         }
 
-        .section-header {
-            text-align: center;
-            margin-bottom: 35px;
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; left: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-red), transparent);
         }
 
-        .section-header h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
-            color: #fff;
-            letter-spacing: 3px;
-            margin-bottom: 8px;
+        /* --- الطرفية التفاعلية (Terminal) --- */
+        .section-container {
+            max-width: 1050px;
+            margin: 5rem auto;
+            padding: 0 1.5rem;
         }
 
-        .section-header p {
-            font-size: 0.9rem;
-            color: var(--text-dim);
-        }
-
-        .links-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .link-item {
+        .terminal-header {
+            background: rgba(15, 0, 5, 0.9);
+            padding: 0.8rem 1.2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 18px 24px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            color: var(--text-primary);
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-
-        .link-item:hover {
-            background: rgba(255, 0, 51, 0.08);
-            border-color: var(--accent-red);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.6), 0 0 20px var(--accent-glow);
-        }
-
-        .link-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .platform-name {
-            font-family: 'Chakra Petch', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-            display: block;
-        }
-
-        .handle {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.85rem;
-            color: var(--accent-red);
+            border-bottom: 1px solid rgba(255, 0, 60, 0.2);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
             direction: ltr;
         }
 
-        .icon {
-            width: 24px;
-            height: 24px;
-            fill: var(--accent-red);
+        .terminal-btns { display: flex; gap: 6px; }
+        .t-btn { width: 10px; height: 10px; border-radius: 50%; }
+        .t-close { background: #ff5f56; }
+        .t-min { background: #ffbd2e; }
+        .t-max { background: #27c93f; }
+
+        .terminal-body {
+            padding: 2rem;
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            color: var(--text-main);
+            min-height: 280px;
+            direction: ltr;
+            text-align: left;
         }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--accent-red);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--accent-red);
+        .terminal-line { margin-bottom: 0.8rem; }
+        .prompt { color: var(--neon-red); margin-right: 8px; }
+        
+        .terminal-input-container {
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        #term-input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            outline: none;
+            width: 100%;
+            margin-left: 8px;
+        }
+
+        /* --- بطاقات التواصل الاجتماعي --- */
+        .grid-two {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .intel-card {
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .intel-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--neon-red);
+            box-shadow: 0 12px 35px var(--neon-red-glow);
+        }
+
+        .intel-icon {
+            font-size: 2.8rem;
+            color: var(--neon-red);
+            margin-bottom: 1.5rem;
+        }
+
+        .intel-title {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            direction: ltr;
+            text-align: right;
+        }
+
+        .intel-handle {
+            font-size: 1.8rem;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 800;
+            direction: ltr;
+            display: inline-block;
+            transition: color 0.2s;
+        }
+
+        .intel-handle:hover {
+            color: var(--neon-red);
+            text-shadow: 0 0 15px var(--neon-red);
+        }
+
+        /* --- الفوتر --- */
+        footer {
+            padding: 4rem 1.5rem;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255, 0, 60, 0.1);
+            direction: ltr;
         }
 
         @keyframes pulse {
-            0% { opacity: 0.6; box-shadow: 0 0 5px var(--accent-glow); }
-            100% { opacity: 1; box-shadow: 0 0 25px var(--accent-glow); }
+            0% { opacity: 0.3; transform: scale(0.9); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 0.3; transform: scale(0.9); }
         }
 
-        @keyframes pulse-skull {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px var(--accent-glow)); }
-            50% { transform: scale(1.05); filter: drop-shadow(0 0 35px var(--accent-red)); }
+        .reveal {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-8px); }
-            60% { transform: translateY(-4px); }
-        }
-
-        @media (max-width: 600px) {
-            .identity-title { font-size: 3.5rem; letter-spacing: 6px; }
-            .skull-container { width: 140px; height: 170px; }
-            .subtitle { font-size: 1rem; }
-            .contact-card { padding: 30px 20px; }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
 
-    <div class="cyber-grid"></div>
+    <div id="cursor-dot"></div>
+    <div id="floating-words-container"></div>
+    <div class="scanlines"></div>
+    <canvas id="bg-canvas"></canvas>
 
-    <section class="hero-section">
-        <div class="status-badge">// SYSTEM ACCESS: GRANTED</div>
-        <h1 class="identity-title">KOBR</h1>
-        
-        <!-- صورة جمجمة واقعية بأسلوب الرسم اليدوي الأحمر -->
-        <div class="skull-container">
-            <svg class="skull-img" viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <filter id="red-glow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feGaussianBlur stdDeviation="8" result="blur" />
-                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                    </filter>
-                    <linearGradient id="skull-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="#ff0055"/>
-                        <stop offset="50%" stop-color="#ff0033"/>
-                        <stop offset="100%" stop-color="#990022"/>
-                    </linearGradient>
-                </defs>
-                <g fill="none" stroke="url(#skull-grad)" stroke-linecap="round" stroke-linejoin="round">
-                    <!-- الجمجمة الخارجية -->
-                    <path d="M 250 40 C 120 40 70 120 70 250 C 70 340 100 390 140 430 C 160 450 165 470 170 510 C 172 525 210 540 250 540 C 290 540 328 525 330 510 C 335 470 340 450 360 430 C 400 390 430 340 430 250 C 430 120 380 40 250 40 Z" stroke-width="4"/>
-                    <!-- تجاويف العينين -->
-                    <path d="M 120 260 C 110 320 180 370 210 320 C 220 280 180 230 140 240 C 125 245 120 250 120 260 Z" fill="#ff0033" fill-opacity="0.85" stroke-width="2"/>
-                    <path d="M 380 260 C 390 320 320 370 290 320 C 280 280 320 230 360 240 C 375 245 380 250 380 260 Z" fill="#ff0033" fill-opacity="0.85" stroke-width="2"/>
-                    <!-- تجويف الأنف -->
-                    <path d="M 250 330 L 225 410 C 240 430 260 430 275 410 Z" fill="#ff0033" stroke-width="2"/>
-                    <!-- خطوط التظليل الدقيقة (تجسيد أسلوب السكتش) -->
-                    <path d="M 180 70 Q 250 100 320 70" stroke-width="1.5" opacity="0.7"/>
-                    <path d="M 160 90 Q 250 130 340 90" stroke-width="1.5" opacity="0.7"/>
-                    <path d="M 140 115 Q 250 160 360 115" stroke-width="1.5" opacity="0.6"/>
-                    <path d="M 120 140 Q 250 190 380 140" stroke-width="1.2" opacity="0.6"/>
-                    <path d="M 110 170 Q 250 220 390 170" stroke-width="1" opacity="0.5"/>
-                    <path d="M 100 200 Q 250 240 400 200" stroke-width="1" opacity="0.4"/>
-                    <!-- خطوط الفك والأسنان -->
-                    <path d="M 180 470 L 180 520 M 205 470 L 205 525 M 230 470 L 230 530 M 250 470 L 250 530 M 270 470 L 270 530 M 295 470 L 295 525 M 320 470 L 320 520" stroke-width="2.5"/>
-                    <path d="M 170 495 Q 250 510 330 495" stroke-width="2"/>
-                    <!-- تظليل الفك الجانبي -->
-                    <path d="M 80 280 C 100 350 140 400 170 450" stroke-width="2" stroke-dasharray="4 3"/>
-                    <path d="M 420 280 C 400 350 360 400 330 450" stroke-width="2" stroke-dasharray="4 3"/>
-                    <path d="M 90 240 C 120 180 150 140 200 110" stroke-width="1.5" opacity="0.8"/>
-                    <path d="M 410 240 C 380 180 350 140 300 110" stroke-width="1.5" opacity="0.8"/>
-                </g>
-            </svg>
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="brand">KOBR<span>.</span></a>
+        <div class="sys-status">
+            <div class="status-dot"></div>
+            <span>[ PROTOCOL ACTIVE // ENCRYPTED ]</span>
         </div>
+    </nav>
 
-        <p class="subtitle">Never think we are in competition. All i see is me</p>
-
-        <div class="scroll-indicator">
-            <span>انزل للتواصل</span>
-            <div class="arrow"></div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-subtitle reveal">AUTHENTICATION: LEVEL 0</div>
+        <h1 class="hero-title reveal">KOBR</h1>
+        <div class="hero-quote reveal">
+            "Never think we are in competition All i see is me ."
         </div>
     </section>
 
-    <section class="contact-section">
-        <div class="contact-card">
-            <div class="section-header">
-                <h2>SECURE CHANNELS</h2>
-                <p>قنوات الاتصال المباشرة والأنظمة المشفرة</p>
+    <!-- Interactive Terminal -->
+    <div class="section-container reveal">
+        <div class="glass-panel">
+            <div class="terminal-header">
+                <div class="terminal-btns">
+                    <div class="t-btn t-close"></div>
+                    <div class="t-btn t-min"></div>
+                    <div class="t-btn t-max"></div>
+                </div>
+                <span>root@kobr-system:~#</span>
             </div>
-
-            <div class="links-container">
-                <a href="https://t.me/XCXCxXXCX" target="_blank" class="link-item">
-                    <div class="link-info">
-                        <svg class="icon" viewBox="0 0 24 24">
-                            <path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.568 8.16c-.18 1.897-.96 6.502-1.356 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.119.098.152.228.166.331.016.112.036.368.02.571z"/>
-                        </svg>
-                        <div>
-                            <span class="platform-name">Telegram</span>
-                            <span class="handle">@XCXCxXXCX</span>
-                        </div>
-                    </div>
-                    <div class="status-dot"></div>
-                </a>
-
-                <a href="https://instagram.com/wgjm_" target="_blank" class="link-item">
-                    <div class="link-info">
-                        <svg class="icon" viewBox="0 0 24 24">
-                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                        </svg>
-                        <div>
-                            <span class="platform-name">Instagram</span>
-                            <span class="handle">@wgjm_</span>
-                        </div>
-                    </div>
-                    <div class="status-dot"></div>
-                </a>
+            <div class="terminal-body" id="term-body">
+                <div class="terminal-line"><span class="prompt">></span>System check: Operational.</div>
+                <div class="terminal-line"><span class="prompt">></span>Security status: <span style="color: var(--neon-red);">MAXIMUM OBFUSCATION</span></div>
+                <div class="terminal-line"><span class="prompt">></span>Type <span style="color: var(--neon-red);">'help'</span> to view available system commands.</div>
+                
+                <div class="terminal-input-container">
+                    <span class="prompt">></span>
+                    <input type="text" id="term-input" autofocus autocomplete="off" spellcheck="false">
+                </div>
             </div>
         </div>
-    </section>
+    </div>
 
+    <!-- Contact & Social Intel -->
+    <div class="section-container">
+        <div class="grid-two">
+            <!-- Telegram -->
+            <div class="glass-panel intel-card reveal">
+                <div>
+                    <i class="fa-brands fa-telegram intel-icon"></i>
+                    <div class="intel-title">TELEGRAM ENCRYPTED LINK</div>
+                </div>
+                <div>
+                    <a href="https://t.me/XCXCxXXCX" target="_blank" class="intel-handle">@XCXCxXXCX</a>
+                </div>
+            </div>
+
+            <!-- Instagram -->
+            <div class="glass-panel intel-card reveal">
+                <div>
+                    <i class="fa-brands fa-instagram intel-icon"></i>
+                    <div class="intel-title">INSTAGRAM DIRECT ACCESS</div>
+                </div>
+                <div>
+                    <a href="https://instagram.com/wgjm_" target="_blank" class="intel-handle">wgjm_</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 KOBR. ALL RIGHTS RESERVED // ZERO TRACE SYSTEM</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Custom Cursor
+        const dot = document.getElementById('cursor-dot');
+
+        window.addEventListener('mousemove', (e) => {
+            dot.style.left = `${e.clientX}px`;
+            dot.style.top = `${e.clientY}px`;
+        });
+
+        // توليد الكلمات المتناثرة ذات المعنى في الخلفية
+        const wordsList = ["ZERO", "TRACE", "ROOT", "CYBER", "KOBR", "SYSTEM", "SECURE", "ELITE", "PROTOCOL", "OVERRIDE"];
+        const wordsContainer = document.getElementById('floating-words-container');
+
+        function createFloatingWord() {
+            const wordEl = document.createElement('div');
+            wordEl.className = 'floating-word';
+            wordEl.innerText = wordsList[Math.floor(Math.random() * wordsList.length)];
+            
+            const randomX = Math.random() * window.innerWidth;
+            const randomDuration = 8 + Math.random() * 10;
+            const randomSize = 0.7 + Math.random() * 0.6;
+            
+            wordEl.style.left = `${randomX}px`;
+            wordEl.style.fontSize = `${randomSize}rem`;
+            wordEl.style.animationDuration = `${randomDuration}s`;
+            
+            wordsContainer.appendChild(wordEl);
+
+            setTimeout(() => {
+                wordEl.remove();
+            }, randomDuration * 1000);
+        }
+
+        setInterval(createFloatingWord, 1200);
+
+        // Matrix Background Effect
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const chars = '01010101KOBRXCXCXWGJM#$@%&*';
+        const fontSize = 14;
+        const columns = Math.floor(canvas.width / fontSize);
+        const drops = Array(columns).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(3, 3, 5, 0.12)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#ff003c';
+            ctx.font = fontSize + 'px "Fira Code"';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 33);
+
+        // Interactive Terminal Commands
+        const termInput = document.getElementById('term-input');
+        const termBody = document.getElementById('term-body');
+
+        termInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const cmd = termInput.value.trim().toLowerCase();
+                const container = termInput.parentElement;
+                
+                const historyLine = document.createElement('div');
+                historyLine.className = 'terminal-line';
+                historyLine.innerHTML = `<span class="prompt">></span>${termInput.value}`;
+                termBody.insertBefore(historyLine, container);
+
+                const responseLine = document.createElement('div');
+                responseLine.className = 'terminal-line';
+                
+                if (cmd === 'help') {
+                    responseLine.innerHTML = `<span style="color: var(--text-muted);">Available commands:</span><br>
+                    - <span style="color: var(--neon-red);">whoami</span>: Displays system target information.<br>
+                    - <span style="color: var(--neon-red);">clear</span>: Clears terminal history.<br>
+                    - <span style="color: var(--neon-red);">socials</span>: Shows linked communication handles.`;
+                } else if (cmd === 'whoami') {
+                    responseLine.innerHTML = `TARGET: <span style="color: var(--neon-red);">KOBR</span> // SECURITY ARCHITECT`;
+                } else if (cmd === 'socials') {
+                    responseLine.innerHTML = `Telegram: @XCXCxXXCX | Instagram: wgjm_`;
+                } else if (cmd === 'clear') {
+                    const lines = termBody.querySelectorAll('.terminal-line');
+                    lines.forEach(l => l.remove());
+                    termInput.value = '';
+                    return;
+                } else if (cmd !== '') {
+                    responseLine.innerHTML = `<span style="color: #ff5f56;">Command not recognized: ${cmd}</span>`;
+                }
+
+                if (cmd !== '') {
+                    termBody.insertBefore(responseLine, container);
+                }
+
+                termInput.value = '';
+                termBody.scrollTop = termBody.scrollHeight;
+            }
+        });
+
+        // Scroll Reveal
+        const reveals = document.querySelectorAll('.reveal');
+        function revealOnScroll() {
+            const windowHeight = window.innerHeight;
+            reveals.forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                if (elementTop < windowHeight - 120) {
+                    el.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll();
+    </script>
 </body>
 </html>
