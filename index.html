@@ -9,13 +9,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Orbitron:wght@500;800;900&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #05070a;
-            --card-bg: rgba(12, 17, 26, 0.75);
-            --accent-green: #00ff88;
-            --accent-glow: rgba(0, 255, 136, 0.25);
+            --bg-color: #050203;
+            --card-bg: rgba(18, 5, 8, 0.85);
+            --accent-red: #ff0033;
+            --accent-glow: rgba(255, 0, 51, 0.4);
             --text-primary: #e0e6ed;
-            --text-dim: #8c9ba5;
-            --border-color: rgba(0, 255, 136, 0.2);
+            --text-dim: #a58c93;
+            --border-color: rgba(255, 0, 51, 0.3);
         }
 
         * {
@@ -32,12 +32,11 @@
             min-height: 200vh;
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 50% 30%, rgba(0, 255, 136, 0.05) 0%, transparent 60%),
-                linear-gradient(to bottom, transparent 95%, rgba(0, 255, 136, 0.03) 100%);
+                radial-gradient(circle at 50% 35%, rgba(255, 0, 51, 0.12) 0%, transparent 60%),
+                linear-gradient(to bottom, transparent 95%, rgba(255, 0, 51, 0.05) 100%);
             background-size: 100% 100%, 100% 4px;
         }
 
-        /* خلفية شبكية سيبرانية */
         .cyber-grid {
             position: fixed;
             top: 0;
@@ -45,14 +44,13 @@
             width: 100%;
             height: 100%;
             background-image: 
-                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+                linear-gradient(rgba(255, 0, 51, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 51, 0.04) 1px, transparent 1px);
             background-size: 40px 40px;
             z-index: -1;
             pointer-events: none;
         }
 
-        /* Hero Section - الهوية الرئيسية */
         .hero-section {
             height: 100vh;
             display: flex;
@@ -68,12 +66,12 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 0.85rem;
             letter-spacing: 3px;
-            color: var(--accent-green);
-            background: rgba(0, 255, 136, 0.08);
+            color: var(--accent-red);
+            background: rgba(255, 0, 51, 0.08);
             border: 1px solid var(--border-color);
             padding: 8px 18px;
             border-radius: 50px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             box-shadow: 0 0 15px var(--accent-glow);
             text-transform: uppercase;
             animation: pulse 2.5s infinite alternate;
@@ -87,9 +85,28 @@
             color: #ffffff;
             text-shadow: 
                 0 0 20px var(--accent-glow),
-                0 0 40px rgba(0, 255, 136, 0.1);
-            margin-bottom: 20px;
+                0 0 40px rgba(255, 0, 51, 0.3);
+            margin-bottom: 10px;
             position: relative;
+        }
+
+        /* الجمجمة الواقعية المرسومة باللون الأحمر */
+        .skull-container {
+            width: 180px;
+            height: 220px;
+            margin: 5px 0 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            animation: pulse-skull 3.5s infinite ease-in-out;
+        }
+
+        .skull-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 20px var(--accent-red)) drop-shadow(0 0 40px var(--accent-glow));
         }
 
         .subtitle {
@@ -104,10 +121,9 @@
             text-transform: uppercase;
         }
 
-        /* مؤشر التمرير */
         .scroll-indicator {
             position: absolute;
-            bottom: 40px;
+            bottom: 30px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -122,12 +138,11 @@
         .scroll-indicator .arrow {
             width: 12px;
             height: 12px;
-            border-right: 2px solid var(--accent-green);
-            border-bottom: 2px solid var(--accent-green);
+            border-right: 2px solid var(--accent-red);
+            border-bottom: 2px solid var(--accent-red);
             transform: rotate(45deg);
         }
 
-        /* قسم وسائل التواصل الغامض */
         .contact-section {
             min-height: 100vh;
             display: flex;
@@ -146,7 +161,7 @@
             padding: 45px 35px;
             width: 100%;
             max-width: 480px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px var(--accent-glow);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.95), 0 0 35px var(--accent-glow);
             position: relative;
             overflow: hidden;
         }
@@ -158,7 +173,7 @@
             left: 0;
             width: 100%;
             height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
+            background: linear-gradient(90deg, transparent, var(--accent-red), transparent);
         }
 
         .section-header {
@@ -179,7 +194,6 @@
             color: var(--text-dim);
         }
 
-        /* أزرار الحسابات */
         .links-container {
             display: flex;
             flex-direction: column;
@@ -201,10 +215,10 @@
         }
 
         .link-item:hover {
-            background: rgba(0, 255, 136, 0.05);
-            border-color: var(--accent-green);
+            background: rgba(255, 0, 51, 0.08);
+            border-color: var(--accent-red);
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4), 0 0 15px var(--accent-glow);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.6), 0 0 20px var(--accent-glow);
         }
 
         .link-info {
@@ -224,28 +238,32 @@
         .handle {
             font-family: 'Orbitron', sans-serif;
             font-size: 0.85rem;
-            color: var(--accent-green);
+            color: var(--accent-red);
             direction: ltr;
         }
 
         .icon {
             width: 24px;
             height: 24px;
-            fill: var(--accent-green);
+            fill: var(--accent-red);
         }
 
         .status-dot {
             width: 8px;
             height: 8px;
-            background-color: var(--accent-green);
+            background-color: var(--accent-red);
             border-radius: 50%;
-            box-shadow: 0 0 8px var(--accent-green);
+            box-shadow: 0 0 10px var(--accent-red);
         }
 
-        /* Animations */
         @keyframes pulse {
             0% { opacity: 0.6; box-shadow: 0 0 5px var(--accent-glow); }
-            100% { opacity: 1; box-shadow: 0 0 20px var(--accent-glow); }
+            100% { opacity: 1; box-shadow: 0 0 25px var(--accent-glow); }
+        }
+
+        @keyframes pulse-skull {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px var(--accent-glow)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 35px var(--accent-red)); }
         }
 
         @keyframes bounce {
@@ -256,6 +274,7 @@
 
         @media (max-width: 600px) {
             .identity-title { font-size: 3.5rem; letter-spacing: 6px; }
+            .skull-container { width: 140px; height: 170px; }
             .subtitle { font-size: 1rem; }
             .contact-card { padding: 30px 20px; }
         }
@@ -265,10 +284,51 @@
 
     <div class="cyber-grid"></div>
 
-    <!-- القسم الأول: الواجهة الفخمة -->
     <section class="hero-section">
         <div class="status-badge">// SYSTEM ACCESS: GRANTED</div>
         <h1 class="identity-title">KOBR</h1>
+        
+        <!-- صورة جمجمة واقعية بأسلوب الرسم اليدوي الأحمر -->
+        <div class="skull-container">
+            <svg class="skull-img" viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <filter id="red-glow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="8" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                    <linearGradient id="skull-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#ff0055"/>
+                        <stop offset="50%" stop-color="#ff0033"/>
+                        <stop offset="100%" stop-color="#990022"/>
+                    </linearGradient>
+                </defs>
+                <g fill="none" stroke="url(#skull-grad)" stroke-linecap="round" stroke-linejoin="round">
+                    <!-- الجمجمة الخارجية -->
+                    <path d="M 250 40 C 120 40 70 120 70 250 C 70 340 100 390 140 430 C 160 450 165 470 170 510 C 172 525 210 540 250 540 C 290 540 328 525 330 510 C 335 470 340 450 360 430 C 400 390 430 340 430 250 C 430 120 380 40 250 40 Z" stroke-width="4"/>
+                    <!-- تجاويف العينين -->
+                    <path d="M 120 260 C 110 320 180 370 210 320 C 220 280 180 230 140 240 C 125 245 120 250 120 260 Z" fill="#ff0033" fill-opacity="0.85" stroke-width="2"/>
+                    <path d="M 380 260 C 390 320 320 370 290 320 C 280 280 320 230 360 240 C 375 245 380 250 380 260 Z" fill="#ff0033" fill-opacity="0.85" stroke-width="2"/>
+                    <!-- تجويف الأنف -->
+                    <path d="M 250 330 L 225 410 C 240 430 260 430 275 410 Z" fill="#ff0033" stroke-width="2"/>
+                    <!-- خطوط التظليل الدقيقة (تجسيد أسلوب السكتش) -->
+                    <path d="M 180 70 Q 250 100 320 70" stroke-width="1.5" opacity="0.7"/>
+                    <path d="M 160 90 Q 250 130 340 90" stroke-width="1.5" opacity="0.7"/>
+                    <path d="M 140 115 Q 250 160 360 115" stroke-width="1.5" opacity="0.6"/>
+                    <path d="M 120 140 Q 250 190 380 140" stroke-width="1.2" opacity="0.6"/>
+                    <path d="M 110 170 Q 250 220 390 170" stroke-width="1" opacity="0.5"/>
+                    <path d="M 100 200 Q 250 240 400 200" stroke-width="1" opacity="0.4"/>
+                    <!-- خطوط الفك والأسنان -->
+                    <path d="M 180 470 L 180 520 M 205 470 L 205 525 M 230 470 L 230 530 M 250 470 L 250 530 M 270 470 L 270 530 M 295 470 L 295 525 M 320 470 L 320 520" stroke-width="2.5"/>
+                    <path d="M 170 495 Q 250 510 330 495" stroke-width="2"/>
+                    <!-- تظليل الفك الجانبي -->
+                    <path d="M 80 280 C 100 350 140 400 170 450" stroke-width="2" stroke-dasharray="4 3"/>
+                    <path d="M 420 280 C 400 350 360 400 330 450" stroke-width="2" stroke-dasharray="4 3"/>
+                    <path d="M 90 240 C 120 180 150 140 200 110" stroke-width="1.5" opacity="0.8"/>
+                    <path d="M 410 240 C 380 180 350 140 300 110" stroke-width="1.5" opacity="0.8"/>
+                </g>
+            </svg>
+        </div>
+
         <p class="subtitle">Never think we are in competition. All i see is me</p>
 
         <div class="scroll-indicator">
@@ -277,7 +337,6 @@
         </div>
     </section>
 
-    <!-- القسم الثاني: القنوات والمعرفات -->
     <section class="contact-section">
         <div class="contact-card">
             <div class="section-header">
@@ -286,7 +345,6 @@
             </div>
 
             <div class="links-container">
-                <!-- تليجرام -->
                 <a href="https://t.me/XCXCxXXCX" target="_blank" class="link-item">
                     <div class="link-info">
                         <svg class="icon" viewBox="0 0 24 24">
@@ -300,7 +358,6 @@
                     <div class="status-dot"></div>
                 </a>
 
-                <!-- انستغرام -->
                 <a href="https://instagram.com/wgjm_" target="_blank" class="link-item">
                     <div class="link-info">
                         <svg class="icon" viewBox="0 0 24 24">
